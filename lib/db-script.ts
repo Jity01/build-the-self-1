@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
-
+// TODO make sure to disconnect: BOTH TIMES!
 export const createCategory = async (title: string, shortTitle: string): Promise<any> => { // type return, see what prisma can provide u
   try {
     const category = await prisma.category.create({
