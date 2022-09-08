@@ -1,5 +1,5 @@
-export default function Input({ text, func, state }: { text: string, func: any, state: string }) { // TODO type args
+export default function Input({ placeholder, onChange, value }: { placeholder: string, onChange: any, value: string }) { // TODO type args
   return (
-    <input placeholder={text} onChange={func} value={state} />
+    <input placeholder={placeholder} onChange={onChange} value={value} />
   );
 }
