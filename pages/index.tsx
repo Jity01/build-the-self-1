@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
 import Layout from '../components/layout'
 import Button from '../components/button'
 import Input from '../components/input'
@@ -36,7 +37,7 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
       <h3>Writings by Category:</h3>
       <ul>
         { // make sure shortTitle is unique in prisma schema (for key & url)
-          data.map((category, i) => <li key={i}>{category.title}</li>)
+          data.map((category: {id: number, title: string, shortTitle: string}) => <Link key={category.id} href={"/categories/" + category.id}>{category.title}</Link>)
         } 
       </ul>
       { 
