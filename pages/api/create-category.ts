@@ -3,7 +3,8 @@ import { NextApiRequest, NextApiResponse } from "next"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const category = await createCategory(req.body.title, req.body.shortTitle, req.body.quote, req.body.sourceOfQuote)
+    const { title, shortTitle, quote, sourceOfQuote } = req.body;
+    const category = await createCategory(title, shortTitle, quote, sourceOfQuote)
     res.status(200).json(category)
   } catch (e) {
     res.status(500) // TODO make more dynamic
