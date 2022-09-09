@@ -6,7 +6,7 @@ import Input from '../components/input'
 import { getCategories } from '../lib/db-script'
 import { GetStaticProps } from 'next'
 
-export default function Home ({ data }): React.ReactNode { // TODO: generate lists, type args
+export default function Home ({ categories }): React.ReactNode { // TODO: generate lists, type args
   const [openInput, setOpenInput] = useState(false)
   const [title, setTitle] = useState('')
   const [shortTitle, setShortTitle] = useState('')
@@ -26,7 +26,7 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
       body: JSON.stringify({'title': title, 'shortTitle': shortTitle, 'quote': quote, 'sourceOfQuote': sourceOfQuote})
     })
       .then(res => res.json())
-      .then(res => data.push(res)) // update mapped data
+      .then(res => categories.push(res)) // update mapped categories
       .catch(e => console.log(e))
 
     setOpenInput(false)
@@ -43,19 +43,20 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
       <h3>Writings by Category:</h3>
       <ul>
         { // TODO abstract type
-          data.map((category: {id: number, title: string, shortTitle: string, quote: string, sourceOfQuote: string}) => <li key={category.id}><Link href={"/categories/" + category.id}>{category.title}</Link></li>)
+          categories.map((category: {id: number, title: string, shortTitle: string, quote: string, sourceOfQuote: string}) => <li key={category.id}><Link href={"/categories/" + category.id}>{category.title}</Link></li>)
         } 
       </ul>
       { 
         openInput
         &&
-          <div>
+          <>
             <Input placeholder="Input New Category" onChange={handleTitleChange} value={title} />
             <Input placeholder="Input Short Title" onChange={handleShortTitleChange} value={shortTitle} />
             <Input placeholder="Input Quote" onChange={handleQuoteChange} value={quote} />
             <Input placeholder="Input Source Of Quote" onChange={handleSourceOfQuoteChange} value={sourceOfQuote}/>
             <Button text="Enter" onClick={handleEnter} />
-          </div>}
+          </>
+      }
       <Button text="Add More (5)" onClick={revealInput}/> 
       {/* TODO add restraint on dev.db */}
       <h3>Other Writings</h3>
@@ -69,6 +70,6 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
 }
 
 export const getStaticProps: GetStaticProps = async () => { // remake the db, it is FUCKED!
-  const fc = await getCategories();
-  return { props: {data: fc} }
+  const categories = await getCategories();
+  return { props: { categories } }
 }
