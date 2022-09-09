@@ -1,7 +1,7 @@
 import Layout from '../../components/layout'
 import { getCategories, getTopicsByCategory, getCategoryTitleById } from '../../lib/db-script';
 
-export default function Button({ topics }) { // TODO type args
+export default function Button({ topics, categoryTitle }) { // TODO type args
   return (
     <Layout />
   );
