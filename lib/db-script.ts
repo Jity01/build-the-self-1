@@ -2,10 +2,10 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export const createCategory = async (title: string, shortTitle: string): Promise<any> => { // type return, see what prisma can provide u
+export const createCategory = async (title: string, shortTitle: string, quote: string, sourceOfQuote: string): Promise<any> => { // type return, see what prisma can provide u
   try {
     const category = await prisma.category.create({
-      data: { title, shortTitle }
+      data: { title, shortTitle, quote, sourceOfQuote }
     })
     await prisma.$disconnect()
     return category
