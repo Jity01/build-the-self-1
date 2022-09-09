@@ -113,7 +113,7 @@ export const getTopicsByCategory = async (categoryId: number): Promise<any> => {
   }
 }
 
-export const getCategoryTitleById = async (categoryId: number): Promise<any> => {
+export const getCategoryById = async (categoryId: number): Promise<any> => {
   try {
     const category = await prisma.category.findUnique({
       where: {
@@ -121,7 +121,7 @@ export const getCategoryTitleById = async (categoryId: number): Promise<any> => 
       }
     })
     await prisma.$disconnect()
-    return category.title
+    return category
   } catch (e) {
     console.error(e)
     await prisma.$disconnect()
