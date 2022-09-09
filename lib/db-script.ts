@@ -121,7 +121,7 @@ export const getCategoryTitleById = async (categoryId: number): Promise<any> => 
       }
     })
     await prisma.$disconnect()
-    return category
+    return category.title
   } catch (e) {
     console.error(e)
     await prisma.$disconnect()
