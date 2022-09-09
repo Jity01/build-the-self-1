@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
-// TODO make sure to disconnect: BOTH TIMES!
+
 export const createCategory = async (title: string, shortTitle: string): Promise<any> => { // type return, see what prisma can provide u
   try {
     const category = await prisma.category.create({
@@ -11,6 +11,7 @@ export const createCategory = async (title: string, shortTitle: string): Promise
     return category
   } catch (e) {
     console.error(e)
+    await prisma.$disconnect()
     process.exit(1)
   }
 }
@@ -26,9 +27,11 @@ export const createTopic = async (title: string, shortTitle: string, quote: stri
         categoryId
       }
     })
+    await prisma.$disconnect()
     return topic
   } catch (e) {
     console.error(e)
+    await prisma.$disconnect()
     process.exit(1) // TODO: what even is this tho
   }
 }
@@ -49,9 +52,11 @@ export const createEssay = async (title: string, shortTitle: string, content: st
         topicId
       }
     })
+    await prisma.$disconnect()
     return essay
   } catch (e) {
     console.error(e)
+    await prisma.$disconnect()
     process.exit(1)
   }
 }
@@ -77,15 +82,49 @@ export const createEssay = async (title: string, shortTitle: string, content: st
 // update topic
 // update essay
 
-// list categories
-// list topics
-// list essays
-export const listCategories = async (): Promise<any> => {
+// get categories
+// get topicsByCategory
+// get essaysByTopic
+export const getCategories = async (): Promise<any> => {
   try {
     const categories = await prisma.category.findMany()
+    await prisma.$disconnect()
     return categories
   } catch (e) {
     console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  }
+}
+
+export const getTopicsByCategory = async (categoryId: number): Promise<any> => {
+  try {
+    const topics = await prisma.topic.findMany({
+      where: {
+        categoryId
+      }
+    })
+    await prisma.$disconnect()
+    return topics
+  } catch (e) {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  }
+}
+
+export const getCategoryTitleById = async (categoryId: number): Promise<any> => {
+  try {
+    const category = await prisma.category.findUnique({
+      where: {
+        id: categoryId
+      }
+    })
+    await prisma.$disconnect()
+    return category
+  } catch (e) {
+    console.error(e)
+    await prisma.$disconnect()
     process.exit(1)
   }
 }
