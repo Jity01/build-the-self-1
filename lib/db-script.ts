@@ -16,14 +16,12 @@ export const createCategory = async (title: string, shortTitle: string): Promise
   }
 }
 
-export const createTopic = async (title: string, shortTitle: string, quote: string, sourceOfQuote: string, categoryId: number): Promise<any> => { // shorten with types
+export const createTopic = async (title: string, shortTitle: string, categoryId: number): Promise<any> => { 
   try {
     const topic = await prisma.topic.create({
       data: {
         title,
         shortTitle,
-        quote,
-        sourceOfQuote,
         categoryId
       }
     })
