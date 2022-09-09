@@ -37,7 +37,7 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
       <h3>Writings by Category:</h3>
       <ul>
         { // make sure shortTitle is unique in prisma schema (for key & url)
-          data.map((category: {id: number, title: string, shortTitle: string}) => <Link key={category.id} href={"/categories/" + category.id}>{category.title}</Link>)
+          data.map((category: {id: number, title: string, shortTitle: string}) => <li><Link key={category.id} href={"/categories/" + category.id}>{category.title}</Link></li>)
         } 
       </ul>
       { 
