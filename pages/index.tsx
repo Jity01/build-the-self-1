@@ -7,14 +7,27 @@ import { GetStaticProps } from 'next'
 
 export default function Home ({ data }): React.ReactNode { // TODO: generate lists, type args
   const [openInput, setOpenInput] = useState(false)
-  const [newCategory, setNewCategory] = useState('')
+  const [title, setTitle] = useState('')
+  const [shortTitle, setShortTitle] = useState('')
 
   const revealInput = () => setOpenInput(true)
-  const handleChange = (e) => setNewCategory(e.target.value)
+  const handleTitleChange = (e) => setTitle(e.target.value)
+  const handleShortTitleChange = (e) => setShortTitle(e.target.value)
 
-  useEffect(() => {
-    console.log(openInput, newCategory)
-  }, [openInput, newCategory])
+  const handleEnter = async () => {
+    await fetch('api/create-category', { // TODO use react-query
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify({'title': title, 'shortTitle': shortTitle})
+    })
+      .then(res => res.json())
+      .then(res => data.push(res)) // update mapped data
+      .catch(e => console.log(e))
+
+    setOpenInput(false)
+    setTitle('')
+    setShortTitle('')
+  }
 
   return (
     <Layout>
@@ -26,8 +39,16 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
           data.map((category, i) => <li key={i}>{category.title}</li>)
         } 
       </ul>
-      { openInput && <Input placeholder="Input New Category" onChange={handleChange} value={newCategory} />}
-      <Button text="Add More (5)" onClick={revealInput}/>
+      { 
+        openInput
+        &&
+          <div>
+            <Input placeholder="Input New Category" onChange={handleTitleChange} value={title} />
+            <Input placeholder="Input Short Title" onChange={handleShortTitleChange} value={shortTitle} />
+            <Button text="Enter" onClick={handleEnter} />
+          </div>}
+      <Button text="Add More (5)" onClick={revealInput}/> 
+      {/* TODO add restraint on dev.db */}
       <h3>Other Writings</h3>
       <ul>
         <li>SWE writings</li>
