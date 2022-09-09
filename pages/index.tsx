@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Layout from '../components/layout'
 import Button from '../components/button'
 import Input from '../components/input'
-import { listCategories } from '../lib/db-script'
+import { getCategories } from '../lib/db-script'
 import { GetStaticProps } from 'next'
 
 export default function Home ({ data }): React.ReactNode { // TODO: generate lists, type args
@@ -60,6 +60,6 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
 }
 
 export const getStaticProps: GetStaticProps = async () => { // remake the db, it is FUCKED!
-  const fc = await listCategories();
+  const fc = await getCategories();
   return { props: {data: fc} }
 }
