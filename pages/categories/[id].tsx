@@ -7,11 +7,11 @@ import { getCategories, getTopicsByCategory, getCategoryById } from '../../lib/d
 
 export default function Category({ topics, category }) { // TODO type args
   const [openInput, setOpenInput] = useState(false)
-  const [topicTitle, setTopicTitle] = useState('') // TODO abstract into an object
+  const [title, setTitle] = useState('') // TODO abstract into an object
   const [shortTitle, setShortTitle] = useState('') // TODO name pathTitle ??
 
   const revealInput = () => setOpenInput(true)
-  const handleTitleChange = (e) => setTopicTitle(e.target.value)
+  const handleTitleChange = (e) => setTitle(e.target.value)
   const handleShortTitleChange = (e) => setShortTitle(e.target.value)
   const handleEnter = () => { // TODO react-query use
     fetch('/api/create-topic', {
@@ -25,7 +25,7 @@ export default function Category({ topics, category }) { // TODO type args
     
     setOpenInput(false)
     setShortTitle('')
-    setTopicTitle('')
+    setTitle('')
   }
 
   return (
@@ -45,7 +45,7 @@ export default function Category({ topics, category }) { // TODO type args
         openInput
           && 
           <div>
-            <Input placeholder="Input Topic Here" onChange={handleTitleChange} value={topicTitle} />
+            <Input placeholder="Input Topic Here" onChange={handleTitleChange} value={title} />
             <Input placeholder="Input Short Title" onChange={handleShortTitleChange} value={shortTitle} />
             <Button text="Enter" onClick={handleEnter} />
           </div>
