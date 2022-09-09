@@ -10,16 +10,20 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
   const [openInput, setOpenInput] = useState(false)
   const [title, setTitle] = useState('')
   const [shortTitle, setShortTitle] = useState('')
+  const [quote, setQuote] = useState('')
+  const [sourceOfQuote, setSourceOfQuote] = useState('')
 
   const revealInput = () => setOpenInput(true)
   const handleTitleChange = (e) => setTitle(e.target.value)
   const handleShortTitleChange = (e) => setShortTitle(e.target.value)
+  const handleQuoteChange = (e) => setQuote(e.target.value)
+  const handleSourceOfQuoteChange = (e) => setSourceOfQuote(e.target.value)
 
   const handleEnter = async () => {
     await fetch('api/create-category', { // TODO use react-query
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-      body: JSON.stringify({'title': title, 'shortTitle': shortTitle})
+      body: JSON.stringify({'title': title, 'shortTitle': shortTitle, 'quote': quote, 'sourceOfQuote': sourceOfQuote})
     })
       .then(res => res.json())
       .then(res => data.push(res)) // update mapped data
@@ -28,6 +32,8 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
     setOpenInput(false)
     setTitle('')
     setShortTitle('')
+    setQuote('')
+    setSourceOfQuote('')
   }
 
   return (
@@ -36,8 +42,8 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
       <p>A humanities education without the $50,000 price tag.</p>
       <h3>Writings by Category:</h3>
       <ul>
-        { // make sure shortTitle is unique in prisma schema (for key & url)
-          data.map((category: {id: number, title: string, shortTitle: string}) => <li key={category.id}><Link href={"/categories/" + category.id}>{category.title}</Link></li>)
+        { // TODO abstract type
+          data.map((category: {id: number, title: string, shortTitle: string, quote: string, sourceOfQuote: string}) => <li key={category.id}><Link href={"/categories/" + category.id}>{category.title}</Link></li>)
         } 
       </ul>
       { 
@@ -46,6 +52,8 @@ export default function Home ({ data }): React.ReactNode { // TODO: generate lis
           <div>
             <Input placeholder="Input New Category" onChange={handleTitleChange} value={title} />
             <Input placeholder="Input Short Title" onChange={handleShortTitleChange} value={shortTitle} />
+            <Input placeholder="Input Quote" onChange={handleQuoteChange} value={quote} />
+            <Input placeholder="Input Source Of Quote" onChange={handleSourceOfQuoteChange} value={sourceOfQuote}/>
             <Button text="Enter" onClick={handleEnter} />
           </div>}
       <Button text="Add More (5)" onClick={revealInput}/> 
