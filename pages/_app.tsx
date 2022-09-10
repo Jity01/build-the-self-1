@@ -9,18 +9,19 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
   })
   const [path, setPath] = useState([])
 
-  const revealInput = () => setOpenInput(true)
-  const handleChange = (e) => {
+  const revealInput = (): void => setOpenInput(true)
+  const handleChange = (e): void => {
     const { id, value } = e.target
-    setInfo({...info, [id]: value})
+    setInfo({ ...info, [id]: value })
   }
-  const handleReset = () => {
+  const handleReset = (): void => {
     setOpenInput(false)
     setInfo({
       title: '', shortTitle: '', quote: '', sourceOfQuote: ''
     })
   }
-  const updatePath = (currentPage) => setPath([...path, currentPage])
+  const updatePath = (currentPage: string): void => setPath([...path, currentPage])
+  const resetPath = (): void => setPath([])
 
   return (
     <Component
@@ -32,5 +33,6 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
       handleChange={handleChange}
       handleReset={handleReset}
       updatePath={updatePath}
+      resetPath={resetPath}
    />)
 }

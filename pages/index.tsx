@@ -4,8 +4,17 @@ import Button from '../components/button'
 import Input from '../components/input'
 import { getCategories } from '../lib/db-script'
 import { GetStaticProps } from 'next'
+import { useEffect } from 'react'
 
-export default function Home ({ categories, openInput, info, revealInput, handleChange, handleReset }): React.ReactNode { // TODO: generate lists, type args
+export default function Home ({
+  categories,
+  openInput,
+  info,
+  revealInput,
+  handleChange,
+  handleReset,
+  resetPath 
+}): React.ReactNode { // TODO: generate lists, type args
   const handleEnter = async () => {
     const { title, shortTitle, quote, sourceOfQuote } = info // TODO handle error - make sure they're filled out
     await fetch('api/create-category', { // TODO use react-query
@@ -18,6 +27,9 @@ export default function Home ({ categories, openInput, info, revealInput, handle
       .catch(e => console.log(e))
     handleReset()
   }
+  useEffect(() => {
+    resetPath()
+  }, [])
   return (
     <Layout>
       <h2>Build the Self</h2>
