@@ -2,17 +2,9 @@ import Layout from '../../components/layout'
 import Button from '../../components/button'
 import Input from '../../components/input'
 import Link from 'next/link'
-import { useState } from 'react'
 import { getCategories, getTopicsByCategory, getCategoryById } from '../../lib/db-script'
 
-export default function Category({ topics, category }) { // TODO type args
-  const [openInput, setOpenInput] = useState(false)
-  const [title, setTitle] = useState('') // TODO abstract into an object
-  const [shortTitle, setShortTitle] = useState('') // TODO name pathTitle ??
-
-  const revealInput = () => setOpenInput(true)
-  const handleTitleChange = (e) => setTitle(e.target.value)
-  const handleShortTitleChange = (e) => setShortTitle(e.target.value)
+export default function Category({ topics, category, openInput, info, revealInput, handleChange, handleReset }) { // TODO type args
   const handleEnter = () => { // TODO react-query use
     fetch('/api/create-topic', {
       method: 'POST',
@@ -23,30 +15,26 @@ export default function Category({ topics, category }) { // TODO type args
       .then(res => topics.push(res)) // update mapped data
       .catch(e => console.log(e))
     
-    setOpenInput(false)
-    setShortTitle('')
-    setTitle('')
+    handleReset()
   }
 
   return (
     <Layout>
       <h2>{category.title}</h2>
-      {/* TODO adjust schema - quote on category instead of topics
-        <p>{category.quote}<p>
-        <p><em>{category.sourceOfQuote}</em><p> 
-      */}
+      <p>{category.quote}</p>
+      <p><em>{category.sourceOfQuote}</em></p> 
       <h3>Writings By Topic</h3>
       <ul>
         {
-          topics.map((topic: { id: number, title: string, shortTitle: string, categoryId: number }) => <li key={topic.id}><Link href={"/topics/" + topic.id}>{topic.title}</Link></li>)
+          topics.map((topic) => <li key={topic.id}><Link href={"/topics/" + topic.id}>{topic.title}</Link></li>)
         }
       </ul>
       {
         openInput
-          && 
+          &&
           <div>
-            <Input placeholder="Input Topic Here" onChange={handleTitleChange} value={title} />
-            <Input placeholder="Input Short Title" onChange={handleShortTitleChange} value={shortTitle} />
+            <Input id="title" placeholder="Input Topic Here" onChange={handleChange} value={info.title} />
+            <Input id="shortTitle" placeholder="Input Short Title" onChange={handleChange} value={info.shortTitle} />
             <Button text="Enter" onClick={handleEnter} />
           </div>
       }
