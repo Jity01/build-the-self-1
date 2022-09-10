@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Link from 'next/link'
 import Layout from '../components/layout'
 import Button from '../components/button'
@@ -6,20 +5,9 @@ import Input from '../components/input'
 import { getCategories } from '../lib/db-script'
 import { GetStaticProps } from 'next'
 
-export default function Home ({ categories }): React.ReactNode { // TODO: generate lists, type args
-  const [openInput, setOpenInput] = useState(false)
-  const [title, setTitle] = useState('')
-  const [shortTitle, setShortTitle] = useState('')
-  const [quote, setQuote] = useState('')
-  const [sourceOfQuote, setSourceOfQuote] = useState('')
-
-  const revealInput = () => setOpenInput(true)
-  const handleTitleChange = (e) => setTitle(e.target.value)
-  const handleShortTitleChange = (e) => setShortTitle(e.target.value)
-  const handleQuoteChange = (e) => setQuote(e.target.value)
-  const handleSourceOfQuoteChange = (e) => setSourceOfQuote(e.target.value)
-
+export default function Home ({ categories, openInput, info, revealInput, handleChange, handleReset}): React.ReactNode { // TODO: generate lists, type args
   const handleEnter = async () => {
+    const { title, shortTitle, quote, sourceOfQuote } = info; // TODO handle error - make sure they're filled out
     await fetch('api/create-category', { // TODO use react-query
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
@@ -28,12 +16,7 @@ export default function Home ({ categories }): React.ReactNode { // TODO: genera
       .then(res => res.json())
       .then(res => categories.push(res)) // update mapped categories
       .catch(e => console.log(e))
-
-    setOpenInput(false)
-    setTitle('')
-    setShortTitle('')
-    setQuote('')
-    setSourceOfQuote('')
+    handleReset()
   }
 
   return (
@@ -44,20 +27,20 @@ export default function Home ({ categories }): React.ReactNode { // TODO: genera
       <ul>
         { // TODO abstract type
           categories.map((category: {id: number, title: string, shortTitle: string, quote: string, sourceOfQuote: string}) => <li key={category.id}><Link href={"/categories/" + category.id}>{category.title}</Link></li>)
-        } 
+        }
       </ul>
-      { 
+      {
         openInput
         &&
           <>
-            <Input placeholder="Input New Category" onChange={handleTitleChange} value={title} />
-            <Input placeholder="Input Short Title" onChange={handleShortTitleChange} value={shortTitle} />
-            <Input placeholder="Input Quote" onChange={handleQuoteChange} value={quote} />
-            <Input placeholder="Input Source Of Quote" onChange={handleSourceOfQuoteChange} value={sourceOfQuote}/>
+            <Input id="title" placeholder="Input New Category" onChange={handleChange} value={info.title} />
+            <Input id="shortTitle" placeholder="Input Short Title" onChange={handleChange} value={info.shortTitle} />
+            <Input id="quote" placeholder="Input Quote" onChange={handleChange} value={info.quote} />
+            <Input id="sourceOfQuote" placeholder="Input Source Of Quote" onChange={handleChange} value={info.sourceOfQuote}/>
             <Button text="Enter" onClick={handleEnter} />
           </>
       }
-      <Button text="Add More (5)" onClick={revealInput}/> 
+      <Button text="Add More (5)" onClick={revealInput}/>
       {/* TODO add restraint on dev.db */}
       <h3>Other Writings</h3>
       <ul>
