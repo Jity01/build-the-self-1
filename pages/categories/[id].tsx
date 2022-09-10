@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { getCategories, getTopicsByCategory, getCategoryById } from '../../lib/db-script'
 import { useEffect } from 'react'
 
-export default function Category({
+export default function Category ({
   topics,
   category,
   openInput,
@@ -43,7 +43,7 @@ export default function Category({
       <h3>Writings By Topic</h3>
       <ul>
         {
-          topics.map((topic) => <li key={topic.id}><Link href={'/topics/'.concat(topic.id)}>{topic.title}</Link></li>)
+          topics.map((topic) => <li key={topic.id}><Link href={'/categories/topics/'.concat(topic.id)}>{topic.title}</Link></li>)
         }
       </ul>
       {
