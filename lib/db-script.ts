@@ -7,7 +7,6 @@ export const createCategory = async (title: string, shortTitle: string, quote: s
     const category = await prisma.category.create({
       data: { title, shortTitle, quote, sourceOfQuote }
     })
-    await prisma.$disconnect()
     return category
   } catch (e) {
     console.error(e)
@@ -25,7 +24,6 @@ export const createTopic = async (title: string, shortTitle: string, categoryId:
         categoryId
       }
     })
-    await prisma.$disconnect()
     return topic
   } catch (e) {
     console.error(e)
@@ -50,7 +48,6 @@ export const createEssay = async (title: string, shortTitle: string, content: st
         topicId
       }
     })
-    await prisma.$disconnect()
     return essay
   } catch (e) {
     console.error(e)
@@ -86,7 +83,6 @@ export const createEssay = async (title: string, shortTitle: string, content: st
 export const getCategories = async (): Promise<any> => {
   try {
     const categories = await prisma.category.findMany()
-    await prisma.$disconnect()
     return categories
   } catch (e) {
     console.error(e)
@@ -102,7 +98,6 @@ export const getTopicsByCategory = async (categoryId: number): Promise<any> => {
         categoryId
       }
     })
-    await prisma.$disconnect()
     return topics
   } catch (e) {
     console.error(e)
@@ -118,7 +113,6 @@ export const getCategoryById = async (categoryId: number): Promise<any> => {
         id: categoryId
       }
     })
-    await prisma.$disconnect()
     return category
   } catch (e) {
     console.error(e)
