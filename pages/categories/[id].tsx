@@ -14,7 +14,8 @@ export default function Category({
   revealInput,
   handleChange,
   handleReset,
-  updatePath }) { // TODO type args
+  updatePath
+}): React.ReactNode { // TODO type args
   const handleEnter = async () => { // TODO react-query use
     const { title, shortTitle } = info
     await fetch('/api/create-topic', {
