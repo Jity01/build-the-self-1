@@ -131,3 +131,31 @@ export const getCategoryById = async (categoryId: number): Promise<any> => {
     process.exit(1)
   }
 }
+
+export const getTopicById = async (topicId: number): Promise<any> => {
+  try {
+    const topic = await prisma.topic.findUnique({
+      where: {
+        id: topicId
+      }
+    })
+    return topic
+  } catch (e) {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1) // TODO make implicit?? for pooling ?
+  }
+}
+
+export const getEssaysByTopic = async (topicId: number): Promise<any> => {
+  try {
+    const essays = await prisma.essay.findMany({
+      where: { topicId }
+    })
+    return essays
+  } catch (e) {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1) // TODO make implicit?? for pooling ?
+  }
+}
