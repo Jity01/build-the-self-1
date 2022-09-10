@@ -106,6 +106,17 @@ export const getTopicsByCategory = async (categoryId: number): Promise<any> => {
   }
 }
 
+export const getTopics = async (): Promise<any> => {
+  try {
+    const topics = await prisma.topic.findMany()
+    return topics
+  } catch (e) {
+    console.error(e)
+    await prisma.$disconnect() // TODO should it be explicit??
+    process.exit(1)
+  }
+}
+
 export const getCategoryById = async (categoryId: number): Promise<any> => {
   try {
     const category = await prisma.category.findUnique({
