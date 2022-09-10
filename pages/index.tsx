@@ -5,7 +5,7 @@ import Input from '../components/input'
 import { getCategories } from '../lib/db-script'
 import { GetStaticProps } from 'next'
 
-export default function Home ({ categories, openInput, info, revealInput, handleChange, handleReset}): React.ReactNode { // TODO: generate lists, type args
+export default function Home ({ categories, openInput, info, revealInput, handleChange, handleReset }): React.ReactNode { // TODO: generate lists, type args
   const handleEnter = async () => {
     const { title, shortTitle, quote, sourceOfQuote } = info // TODO handle error - make sure they're filled out
     await fetch('api/create-category', { // TODO use react-query
