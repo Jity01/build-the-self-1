@@ -3,8 +3,18 @@ import Button from '../../components/button'
 import Input from '../../components/input'
 import Link from 'next/link'
 import { getCategories, getTopicsByCategory, getCategoryById } from '../../lib/db-script'
+import { useEffect } from 'react'
 
-export default function Category({ topics, category, openInput, info, revealInput, handleChange, handleReset }) { // TODO type args
+export default function Category({
+  topics,
+  category,
+  openInput,
+  info,
+  path,
+  revealInput,
+  handleChange,
+  handleReset,
+  updatePath }) { // TODO type args
   const handleEnter = async () => { // TODO react-query use
     const { title, shortTitle } = info
     await fetch('/api/create-topic', {
@@ -17,8 +27,13 @@ export default function Category({ topics, category, openInput, info, revealInpu
       .catch(e => console.log(e))
     handleReset()
   }
+  useEffect(() => {
+    updatePath('categories/'.concat(category.shortTitle))
+  }, [])
+
   return (
     <Layout>
+      <>{ path.map((text, i) => <span key={i}> {'>'} {text}</span>) }</>
       <h2>{category.title}</h2>
       <p>{category.quote}</p>
       <p><em>{category.sourceOfQuote}</em></p>
