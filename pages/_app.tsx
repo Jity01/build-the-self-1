@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
       title: '', shortTitle: '', quote: '', sourceOfQuote: ''
     })
   }
-  const updatePath = (currentPage) => setPath(...path, currentPage)
+  const updatePath = (currentPage) => setPath([...path, currentPage])
 
   return (
     <Component
