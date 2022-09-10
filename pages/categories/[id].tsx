@@ -14,7 +14,8 @@ export default function Category ({
   revealInput,
   handleChange,
   handleReset,
-  updatePath
+  updatePath,
+  recedePath
 }): React.ReactNode { // TODO type args
   const handleEnter = async () => { // TODO react-query use
     const { title, shortTitle } = info
@@ -31,12 +32,16 @@ export default function Category ({
   useEffect(() => {
     const text = 'categories/'.concat(category.shortTitle)
     const link = '/categories/'.concat(category.id)
-    updatePath(text, link)
+    if (!path.length) { // set initial path
+      updatePath(text, link)
+    } else if (path.length > 1) { // reset to inital path
+      recedePath(path[0])
+    }
   }, [])
 
   return (
     <Layout>
-      <>{ path.map((el, i) => <span key={i}> {'>'} <Link href={el[1]}>{el[0]}</Link></span>) }</>
+      <>{ path.map((subPath, i) => <span key={i}> {'>'} <Link href={subPath[1]}>{subPath[0]}</Link></span>) }</>
       <h2>{category.title}</h2>
       <p>{category.quote}</p>
       <p><em>{category.sourceOfQuote}</em></p>
