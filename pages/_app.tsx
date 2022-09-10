@@ -20,8 +20,9 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
       title: '', shortTitle: '', quote: '', sourceOfQuote: ''
     })
   }
-  const updatePath = (text: string, link: string): void => setPath([...path, [text, link]])
+  const updatePath = (text: string, link: string): void => setPath([...path, [text, link]]) // 'add to path' TODO
   const resetPath = (): void => setPath([])
+  const recedePath = (newPath): void => setPath([newPath])
 
   return (
     <Component
@@ -34,5 +35,6 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
       handleReset={handleReset}
       updatePath={updatePath}
       resetPath={resetPath}
+      recedePath={recedePath}
    />)
 }
