@@ -4,34 +4,37 @@ import Button from '../components/button'
 import Input from '../components/input'
 import { getCategories } from '../lib/db-script'
 import { GetStaticProps } from 'next'
+import { useEffect } from 'react'
 
 export default function Home ({ categories, openInput, info, revealInput, handleChange, handleReset}): React.ReactNode { // TODO: generate lists, type args
   const handleEnter = async () => {
-    const { title, shortTitle, quote, sourceOfQuote } = info; // TODO handle error - make sure they're filled out
+    const { title, shortTitle, quote, sourceOfQuote } = info // TODO handle error - make sure they're filled out
     await fetch('api/create-category', { // TODO use react-query
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
       body: JSON.stringify({'title': title, 'shortTitle': shortTitle, 'quote': quote, 'sourceOfQuote': sourceOfQuote})
     })
       .then(res => res.json())
-      .then(res => categories.push(res)) // update mapped categories
+      .then(res => categories.push(res)) // update categories
       .catch(e => console.log(e))
     handleReset()
   }
 
+  useEffect(() => {
+    console.log(categories)
+  }, [categories])
   return (
     <Layout>
       <h2>Build the Self</h2>
       <p>A humanities education without the $50,000 price tag.</p>
       <h3>Writings by Category:</h3>
       <ul>
-        { // TODO abstract type
-          categories.map((category: {id: number, title: string, shortTitle: string, quote: string, sourceOfQuote: string}) => <li key={category.id}><Link href={"/categories/" + category.id}>{category.title}</Link></li>)
+        {
+          categories.map((category) => <li key={category.id}><Link href={"/categories/" + category.id}>{category.title}</Link></li>)
         }
       </ul>
       {
-        openInput
-        &&
+        (Boolean(openInput)) &&
           <>
             <Input id="title" placeholder="Input New Category" onChange={handleChange} value={info.title} />
             <Input id="shortTitle" placeholder="Input Short Title" onChange={handleChange} value={info.shortTitle} />
@@ -53,6 +56,6 @@ export default function Home ({ categories, openInput, info, revealInput, handle
 }
 
 export const getStaticProps: GetStaticProps = async () => { // remake the db, it is FUCKED!
-  const categories = await getCategories();
+  const categories = await getCategories()
   return { props: { categories } }
 }
