@@ -4,7 +4,6 @@ import Button from '../components/button'
 import Input from '../components/input'
 import { getCategories } from '../lib/db-script'
 import { GetStaticProps } from 'next'
-import { useEffect } from 'react'
 
 export default function Home ({ categories, openInput, info, revealInput, handleChange, handleReset}): React.ReactNode { // TODO: generate lists, type args
   const handleEnter = async () => {
@@ -19,10 +18,6 @@ export default function Home ({ categories, openInput, info, revealInput, handle
       .catch(e => console.log(e))
     handleReset()
   }
-
-  useEffect(() => {
-    console.log(categories)
-  }, [categories])
   return (
     <Layout>
       <h2>Build the Self</h2>
