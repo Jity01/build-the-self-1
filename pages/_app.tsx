@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
   const [info, setInfo] = useState({
     title: '', shortTitle: '', quote: '', sourceOfQuote: ''
   })
-  const [path, setPath] = useState([])
+  const [path, setPath] = useState([]) // TODO [text, link]
 
   const revealInput = (): void => setOpenInput(true)
   const handleChange = (e): void => {
@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
       title: '', shortTitle: '', quote: '', sourceOfQuote: ''
     })
   }
-  const updatePath = (currentPage: string): void => setPath([...path, currentPage])
+  const updatePath = (text: string, link: string): void => setPath([...path, [text, link]])
   const resetPath = (): void => setPath([])
 
   return (

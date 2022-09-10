@@ -29,12 +29,14 @@ export default function Category({
     handleReset()
   }
   useEffect(() => {
-    updatePath('categories/'.concat(category.shortTitle))
+    const text = 'categories/'.concat(category.shortTitle)
+    const link = '/categories/'.concat(category.id)
+    updatePath(text, link)
   }, [])
 
   return (
     <Layout>
-      <>{ path.map((text, i) => <span key={i}> {'>'} {text}</span>) }</>
+      <>{ path.map((el, i) => <span key={i}> {'>'} <Link href={el[1]}>{el[0]}</Link></span>) }</>
       <h2>{category.title}</h2>
       <p>{category.quote}</p>
       <p><em>{category.sourceOfQuote}</em></p>
