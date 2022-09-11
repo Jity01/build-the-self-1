@@ -5,7 +5,17 @@ import { useState } from 'react'
 export default function App({ Component, pageProps }: any) { // TODO: type props
   const [openInput, setOpenInput] = useState(false)
   const [info, setInfo] = useState({
-    title: '', shortTitle: '', quote: '', sourceOfQuote: ''
+    title: '',
+    shortTitle: '',
+    quote: '',
+    sourceOfQuote: '',
+    content: '',
+    date: '',
+    age: '',
+    source: '',
+    extraSources: '',
+    pastEssays: '',
+    tags: ''
   })
   const [path, setPath] = useState([]) // TODO [text, link]
 
@@ -17,7 +27,17 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
   const handleReset = (): void => {
     setOpenInput(false)
     setInfo({
-      title: '', shortTitle: '', quote: '', sourceOfQuote: ''
+      title: '',
+      shortTitle: '',
+      quote: '',
+      sourceOfQuote: '',
+      content: '',
+      date: '',
+      age: '',
+      source: '',
+      extraSources: '',
+      pastEssays: '',
+      tags: ''
     })
   }
   const updatePath = (text: string, link: string): void => setPath([...path, [text, link]]) // 'add to path' TODO
