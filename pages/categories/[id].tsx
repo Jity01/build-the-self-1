@@ -35,7 +35,7 @@ export default function Category ({
     if (!path.length) { // set initial path
       updatePath(text, link)
     } else if (path.length > 1) { // reset to inital path
-      recedePath(path[0])
+      recedePath([path[0]])
     }
   }, [])
 
