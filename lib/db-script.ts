@@ -56,30 +56,6 @@ export const createEssay = async (title: string, shortTitle: string, content: st
   }
 }
 
-// remove category
-// remove topic
-// remove essay
-
-// export const removeCategory = async (categoryId: number): Promise<any> => { // would have to delete related records before
-//   try {
-//     const deletedCategory = await prisma.category.delete({
-//       where: { id: categoryId }
-//     })
-//     console.log(deletedCategory)
-//     return deletedCategory
-//   } catch (e) {
-//     console.error(e)
-//     process.exit(1)
-//   }
-// }
-
-// update category
-// update topic
-// update essay
-
-// get categories
-// get topicsByCategory
-// get essaysByTopic
 export const getCategories = async (): Promise<any> => {
   try {
     const categories = await prisma.category.findMany()
@@ -147,7 +123,7 @@ export const getTopicById = async (topicId: number): Promise<any> => {
   }
 }
 
-export const getEssaysByTopic = async (topicId: number): Promise<any> => {
+export const getEssaysByTopic = async (topicId: number): Promise<any> => { // TODO is it used ?
   try {
     const essays = await prisma.essay.findMany({
       where: { topicId }
@@ -157,5 +133,31 @@ export const getEssaysByTopic = async (topicId: number): Promise<any> => {
     console.error(e)
     await prisma.$disconnect()
     process.exit(1) // TODO make implicit?? for pooling ?
+  }
+}
+
+export const getAllEssays = async (): Promise<any> => {
+  try {
+    const essays = await prisma.essay.findMany()
+    return essays
+  } catch (e) {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  }
+}
+
+export const getEssayById = async (essayId: number): Promise<any> => {
+  try {
+    const essay = await prisma.essay.findUnique({
+      where: {
+        id: essayId
+      }
+    })
+    return essay
+  } catch (e) {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
   }
 }
