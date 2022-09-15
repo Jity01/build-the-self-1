@@ -10,19 +10,30 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
     quote: '',
     sourceOfQuote: '',
     content: '',
-    date: '',
-    age: '',
     source: '',
     extraSources: '',
     pastEssays: '',
-    tags: ''
+    tags: []
   })
   const [path, setPath] = useState([]) // TODO [text, link]
+  const [topicIdForAddingAnEssay, setTopicIdForAddingAnEssay] = useState(0)
+  const [metadataCount, setMetadataCount] = useState(0)
 
   const revealInput = (): void => setOpenInput(true)
+  const updateMetadata = (): void => setMetadataCount(metadataCount + 1)
   const handleChange = (e): void => {
-    const { id, value } = e.target
-    setInfo({ ...info, [id]: value })
+    const { id } = e.target
+    if (id === 'tags') {
+      const { options } = e.target
+      const value = []
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].selected) value.push(options[i].value)
+      }
+      setInfo({ ...info, [id]: value })
+    } else {
+      const { value } = e.target
+      setInfo({ ...info, [id]: value })
+    }
   }
   const handleReset = (): void => {
     setOpenInput(false)
@@ -32,29 +43,31 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
       quote: '',
       sourceOfQuote: '',
       content: '',
-      date: '',
-      age: '',
       source: '',
       extraSources: '',
       pastEssays: '',
-      tags: ''
+      tags: []
     })
   }
   const updatePath = (text: string, link: string): void => setPath([...path, [text, link]]) // 'add to path' TODO
   const resetPath = (): void => setPath([])
-  const recedePath = (newPath): void => setPath([newPath])
-
+  const recedePath = (newPath): void => setPath(newPath)
+  const updateTopicIdForAddingAnEssay = (topicId: number): void => setTopicIdForAddingAnEssay(topicId)
   return (
     <Component
       {...pageProps}
       openInput={openInput}
+      metadataCount={metadataCount}
       info={info}
       path={path}
+      topicIdForAddingAnEssay={topicIdForAddingAnEssay}
       revealInput={revealInput}
+      updateMetadata={updateMetadata}
       handleChange={handleChange}
       handleReset={handleReset}
       updatePath={updatePath}
       resetPath={resetPath}
       recedePath={recedePath}
+      updateTopicIdForAddingAnEssay={updateTopicIdForAddingAnEssay}
    />)
 }
