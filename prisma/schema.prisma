@@ -35,7 +35,7 @@ model Essay {
   content String
   date String
   age String
-  source String
+  source String // TODO dumb name lol
   extraSources String 
   pastEssays String
   tags String
