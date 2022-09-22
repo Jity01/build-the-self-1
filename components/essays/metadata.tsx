@@ -1,4 +1,4 @@
-export default function Metadata({ source, extraSources, pastEssays, tags }) { // TODO: type props
+export default function Metadata({ source, extraSources, pastEssays, tags }: any) { // TODO: type props
   return (
     <div>
       <p><em>{source}</em></p>
