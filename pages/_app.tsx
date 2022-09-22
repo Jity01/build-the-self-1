@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
 
   const revealInput = (): void => setOpenInput(true)
   const updateMetadata = (): void => setMetadataCount(metadataCount + 1)
-  const handleChange = (e): void => {
+  const handleChange = (e: any): void => {
     const { id } = e.target
     if (id === 'tags') {
       const { options } = e.target
