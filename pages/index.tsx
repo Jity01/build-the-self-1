@@ -27,6 +27,8 @@ export default function Home ({
       .catch(e => console.log(e))
     handleReset()
   }
+  const handleDelete = async () => {
+  }
   useEffect(() => {
     resetPath()
   }, [])
