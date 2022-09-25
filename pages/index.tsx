@@ -15,6 +15,7 @@ export default function Home ({
   handleReset,
   resetPath 
 }): React.ReactNode { // TODO: generate lists, type args
+  // TODO: maybeeee type the component as well ??
   const handleEnter = async () => {
     const { title, shortTitle, quote, sourceOfQuote } = info // TODO handle error - make sure they're filled out
     await fetch('api/create-category', { // TODO use react-query
