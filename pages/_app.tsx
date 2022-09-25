@@ -1,8 +1,19 @@
 import '../styles/global.css'
-import { useState } from 'react'
+import { ReactElement, useState } from 'react'
 import { AppProps } from 'next/app'
+import {
+  RevealInput,
+  HandleChange,
+  HandleSelect,
+  HandleReset,
+  AddToPath,
+  ResetPath,
+  RecedePathTo,
+  UpdateEssayTopic,
+  UpdateMetadataState
+} from '../types/state.interface'
 
-export default function App ({ Component, pageProps }: AppProps): React.ReactElement {
+export default function App ({ Component, pageProps }: AppProps): ReactElement {
   const [openInput, setOpenInput] = useState(false)
   const [info, setInfo] = useState({
     title: '',
@@ -19,12 +30,12 @@ export default function App ({ Component, pageProps }: AppProps): React.ReactEle
   const [essayTopic, setEssayTopic] = useState(0)
   const [metadataState, setMetadataState] = useState(0)
 
-  const revealInput = (): void => setOpenInput(true)
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const revealInput: RevealInput = () => setOpenInput(true)
+  const handleChange: HandleChange = (e) => {
     const { id, value } = e.target
     setInfo({ ...info, [id]: value })
   }
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+  const handleSelect: HandleSelect = (e) => {
     const { id, options } = e.target
     const value = []
     for (let i = 0; i < options.length; i++) {
@@ -32,7 +43,7 @@ export default function App ({ Component, pageProps }: AppProps): React.ReactEle
     }
     setInfo({ ...info, [id]: value })
   }
-  const handleReset = (): void => {
+  const handleReset: HandleReset = () => {
     setOpenInput(false)
     setInfo({
       title: '',
@@ -46,11 +57,11 @@ export default function App ({ Component, pageProps }: AppProps): React.ReactEle
       tags: []
     })
   }
-  const addToPath = (text: string, url: string): void => setPath([...path, [text, url]])
-  const resetPath = (): void => setPath([['', '']])
-  const recedePath = (newPath: string[][]): void => setPath(newPath)
-  const updateEssayTopic = (topicId: number): void => setEssayTopic(topicId)
-  const updateMetadataState = (): void => setMetadataState(metadataState + 1)
+  const addToPath: AddToPath = (text, url) => setPath([...path, [text, url]])
+  const resetPath: ResetPath = () => setPath([['', '']])
+  const recedePathTo: RecedePathTo = (newPath) => setPath(newPath)
+  const updateEssayTopic: UpdateEssayTopic = (topicId) => setEssayTopic(topicId)
+  const updateMetadataState: UpdateMetadataState = () => setMetadataState(metadataState + 1)
 
   return (
     <Component
@@ -67,7 +78,7 @@ export default function App ({ Component, pageProps }: AppProps): React.ReactEle
       handleReset={handleReset}
       addToPath={addToPath}
       resetPath={resetPath}
-      recedePath={recedePath}
+      recedePathTo={recedePathTo}
       updateEssayTopic={updateEssayTopic}
    />)
 }
