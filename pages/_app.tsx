@@ -1,8 +1,8 @@
 import '../styles/global.css'
 import { useState } from 'react'
-// import { AppProps } from 'next/app';
+import { AppProps } from 'next/app'
 
-export default function App({ Component, pageProps }: any) { // TODO: type props
+export default function App ({ Component, pageProps }: AppProps): React.ReactElement {
   const [openInput, setOpenInput] = useState(false)
   const [info, setInfo] = useState({
     title: '',
@@ -15,25 +15,22 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
     pastEssays: '',
     tags: []
   })
-  const [path, setPath] = useState([]) // TODO [text, link]
-  const [topicIdForAddingAnEssay, setTopicIdForAddingAnEssay] = useState(0)
-  const [metadataCount, setMetadataCount] = useState(0)
+  const [path, setPath] = useState([['', '']]) // [ [text, url] ]
+  const [essayTopic, setEssayTopic] = useState(0)
+  const [metadataState, setMetadataState] = useState(0)
 
   const revealInput = (): void => setOpenInput(true)
-  const updateMetadata = (): void => setMetadataCount(metadataCount + 1)
-  const handleChange = (e: any): void => {
-    const { id } = e.target
-    if (id === 'tags') {
-      const { options } = e.target
-      const value = []
-      for (let i = 0; i < options.length; i++) {
-        if (options[i].selected) value.push(options[i].value)
-      }
-      setInfo({ ...info, [id]: value })
-    } else {
-      const { value } = e.target
-      setInfo({ ...info, [id]: value })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { id, value } = e.target
+    setInfo({ ...info, [id]: value })
+  }
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    const { id, options } = e.target
+    const value = []
+    for (let i = 0; i < options.length; i++) {
+      if (options[i].selected) value.push(options[i].value)
     }
+    setInfo({ ...info, [id]: value })
   }
   const handleReset = (): void => {
     setOpenInput(false)
@@ -49,25 +46,28 @@ export default function App({ Component, pageProps }: any) { // TODO: type props
       tags: []
     })
   }
-  const updatePath = (text: string, link: string): void => setPath([...path, [text, link]]) // 'add to path' TODO
-  const resetPath = (): void => setPath([])
-  const recedePath = (newPath): void => setPath(newPath)
-  const updateTopicIdForAddingAnEssay = (topicId: number): void => setTopicIdForAddingAnEssay(topicId)
+  const addToPath = (text: string, url: string): void => setPath([...path, [text, url]])
+  const resetPath = (): void => setPath([['', '']])
+  const recedePath = (newPath: string[][]): void => setPath(newPath)
+  const updateEssayTopic = (topicId: number): void => setEssayTopic(topicId)
+  const updateMetadataState = (): void => setMetadataState(metadataState + 1)
+
   return (
     <Component
       {...pageProps}
       openInput={openInput}
-      metadataCount={metadataCount}
+      metadataState={metadataState}
       info={info}
       path={path}
-      topicIdForAddingAnEssay={topicIdForAddingAnEssay}
+      essayTopic={essayTopic}
       revealInput={revealInput}
-      updateMetadata={updateMetadata}
+      updateMetadataState={updateMetadataState}
       handleChange={handleChange}
+      handleSelect={handleSelect}
       handleReset={handleReset}
-      updatePath={updatePath}
+      addToPath={addToPath}
       resetPath={resetPath}
       recedePath={recedePath}
-      updateTopicIdForAddingAnEssay={updateTopicIdForAddingAnEssay}
+      updateEssayTopic={updateEssayTopic}
    />)
 }
