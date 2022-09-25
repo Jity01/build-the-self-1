@@ -4,7 +4,28 @@ import Button from '../components/button'
 import Input from '../components/input'
 import { getCategories } from '../lib/db-script'
 import { GetStaticProps } from 'next'
-import { useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
+import {
+  OpenInput,
+  Info,
+  RevealInput,
+  HandleChange,
+  HandleReset,
+  ResetPath
+} from '../types/state'
+import {
+  Category
+} from '../types/db'
+
+interface Props {
+  categories: Category[]
+  openInput: OpenInput
+  info: Info
+  revealInput: RevealInput
+  handleChange: HandleChange
+  handleReset: HandleReset
+  resetPath: ResetPath
+}
 
 export default function Home ({
   categories,
@@ -13,22 +34,19 @@ export default function Home ({
   revealInput,
   handleChange,
   handleReset,
-  resetPath 
-}): React.ReactNode { // TODO: generate lists, type args
-  // TODO: maybeeee type the component as well ??
-  const handleEnter = async () => {
+  resetPath
+}: Props): ReactElement { // TODO: generate lists
+  const handleEnter = async (): Promise<void> => {
     const { title, shortTitle, quote, sourceOfQuote } = info // TODO handle error - make sure they're filled out
     await fetch('api/create-category', { // TODO use react-query
       method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({'title': title, 'shortTitle': shortTitle, 'quote': quote, 'sourceOfQuote': sourceOfQuote})
     })
       .then(res => res.json())
       .then(res => categories.push(res)) // update categories
       .catch(e => console.log(e))
     handleReset()
-  }
-  const handleDelete = async () => {
   }
   useEffect(() => {
     resetPath()
@@ -40,7 +58,7 @@ export default function Home ({
       <h3>Writings by Category:</h3>
       <ul>
         {
-          categories.map((category) => <li key={category.id}><Link href={"/categories/" + category.id}>{category.title}</Link></li>)
+          categories.map((category) => <li key={category.id}><Link href={`/categories/${category.id}`}>{category.title}</Link></li>)
         }
       </ul>
       {
@@ -65,7 +83,7 @@ export default function Home ({
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => { // remake the db, it is FUCKED!
+export const getStaticProps: GetStaticProps = async () => {
   const categories = await getCategories()
   return { props: { categories } }
 }
