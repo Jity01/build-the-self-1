@@ -3,7 +3,35 @@ import Button from '../../components/button'
 import Input from '../../components/input'
 import Link from 'next/link'
 import { getCategories, getTopicsByCategory, getCategoryById } from '../../lib/db-script'
-import { useEffect } from 'react'
+import { ReactElement, useEffect } from 'react'
+import {
+  OpenInput,
+  Info,
+  Path,
+  RevealInput,
+  HandleChange,
+  HandleReset,
+  AddToPath,
+  RecedePathTo
+} from '../../types/state'
+import {
+  TopicTemplate,
+  CategoryTemplate
+} from '../../types/db'
+import { GetStaticPaths, GetStaticProps } from 'next'
+
+interface Props { // TODO: just extract this..
+  topics: TopicTemplate[]
+  category: CategoryTemplate
+  openInput: OpenInput
+  info: Info
+  path: Path
+  revealInput: RevealInput
+  handleChange: HandleChange
+  handleReset: HandleReset
+  addToPath: AddToPath
+  recedePathTo: RecedePathTo
+}
 
 export default function Category ({
   topics,
@@ -14,9 +42,9 @@ export default function Category ({
   revealInput,
   handleChange,
   handleReset,
-  updatePath,
-  recedePath
-}): React.ReactNode { // TODO type args
+  addToPath,
+  recedePathTo
+}: Props): ReactElement { // TODO type args
   const handleEnter = async () => { // TODO react-query use
     const { title, shortTitle } = info
     await fetch('/api/create-topic', {
@@ -30,12 +58,12 @@ export default function Category ({
     handleReset()
   }
   useEffect(() => {
-    const text = 'categories/'.concat(category.shortTitle)
-    const link = '/categories/'.concat(category.id)
-    if (!path.length) { // set initial path
-      updatePath(text, link)
+    const text = `categories/${category.shortTitle}`
+    const link = `/categories/${category.id}`
+    if (path.length === 0) { // set initial path
+      addToPath(text, link)
     } else if (path.length > 1) { // reset to inital path
-      recedePath([path[0]])
+      recedePathTo([path[0]])
     }
   }, [])
 
@@ -48,11 +76,11 @@ export default function Category ({
       <h3>Writings By Topic</h3>
       <ul>
         {
-          topics.map((topic) => <li key={topic.id}><Link href={'/categories/topics/'.concat(topic.id)}>{topic.title}</Link></li>)
+          topics.map((topic) => <li key={topic.id}><Link href={`/categories/topics/${topic.id}`}>{topic.title}</Link></li>)
         }
       </ul>
       {
-        Boolean(openInput) && // TODO not really needed after typing..
+        openInput &&
           <>
             <Input id="title" placeholder="Input Topic Here" onChange={handleChange} value={info.title} />
             <Input id="shortTitle" placeholder="Input Short Title" onChange={handleChange} value={info.shortTitle} />
@@ -64,13 +92,13 @@ export default function Category ({
   )
 }
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const categories = await getCategories()
   const paths = categories.map(category => ({ params: { id: category.id.toString() } }))
   return { paths, fallback: false }
 }
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => { // TODO: omg jesus y
   const topics = await getTopicsByCategory(parseInt(params.id))
   const category = await getCategoryById(parseInt(params.id))
   return { props: { topics, category } }

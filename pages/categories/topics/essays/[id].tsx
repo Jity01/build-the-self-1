@@ -7,20 +7,40 @@ import html from 'remark-html'
 import { getAllEssays, getEssayById } from '../../../../lib/db-script'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useEffect } from 'react'
+import {
+  Path,
+  MetadataState,
+  AddToPath,
+  RecedePathTo,
+  UpdateMetadataState
+} from '../../../../types/state'
+import {
+  EssayTemplate
+} from '../../../../types/db'
 
+interface Props { // TODO: extract?
+  essay: EssayTemplate
+  contentHtml: string
+  path: Path
+  metadataState: MetadataState
+  updateMetadataState: UpdateMetadataState
+  addToPath: AddToPath
+  recedePathTo: RecedePathTo
+};
 export default function Essay ({
   essay,
   contentHtml,
   path,
-  metadataCount,
-  updateMetadata,
-  updatePath,
-  recedePath
-}): React.ReactNode { // TODO type args
+  metadataState,
+  updateMetadataState,
+  addToPath,
+  recedePathTo
+}: Props): React.ReactNode {
   useEffect(() => {
-    const text = 'essays/'.concat(essay.shortTitle)
-    const link = '/categories/topics/essays'.concat(essay.id)
-    if (path.length === 2) updatePath(text, link)
+    const text = `essays/${essay.shortTitle}`
+    const link = `/categories/topics/essays/${essay.id}`
+    if (path.length === 2) addToPath(text, link)
+    // TODO: make dynamic
   }, [])
 
   return (
@@ -29,17 +49,15 @@ export default function Essay ({
       <h2>{essay.title}</h2>
       <p>{essay.date}</p>
       <p>•• {essay.age}</p>
-      <Button text="Metadata" onClick={updateMetadata}/>
-      { metadataCount % 2 !== 0
-        ? (
+      <Button text="Metadata" onClick={updateMetadataState}/>
+      { metadataState % 2 !== 0 && (
             <Metadata
               source={essay.source}
               extraSources={essay.extraSources}
               pastEssays={essay.pastEssays}
               tags={essay.tags}
             />
-          )
-        : <div /> }
+      ) }
       <div dangerouslySetInnerHTML={{ __html: contentHtml }} />
     </Layout>
   )

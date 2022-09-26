@@ -4,19 +4,41 @@ import Link from 'next/link'
 import { getEssaysByTopic, getTopicById, getTopics } from '../../../lib/db-script'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useEffect } from 'react'
+import {
+  Path,
+  AddToPath,
+  RecedePathTo,
+  UpdateEssayTopic
+} from '../../../types/state'
+import {
+  TopicTemplate,
+  EssayTemplate
+} from '../../../types/db'
 
-export default function Topic ({ topic, essays, path, updatePath, updateTopicIdForAddingAnEssay, recedePath }): React.ReactNode { // TODO type args
+interface Props {
+  topic: TopicTemplate
+  essays: EssayTemplate[]
+  path: Path
+  addToPath: AddToPath
+  recedePathTo: RecedePathTo
+  updateEssayTopic: UpdateEssayTopic
+};
+
+export default function Topic ({
+  topic,
+  essays,
+  path,
+  addToPath,
+  updateEssayTopic,
+  recedePathTo
+}: Props): React.ReactNode {
   useEffect(() => {
-    const text = 'topics/'.concat(topic.shortTitle)
-    const link = '/categories/topics/'.concat(topic.id)
-    if (path.length < 2) updatePath(text, link) // only set if not the initial sub-path
-    if (path.length > 2) recedePath([path[0], path[1]])
-    updateTopicIdForAddingAnEssay(topic.id)
-    // path.length == 2, keep the same
+    const text = `topics/${topic.shortTitle}`
+    const link = `/categories/topics/${topic.id}`
+    if (path.length < 2) addToPath(text, link) // only add if not the initial sub-path
+    if (path.length > 2) recedePathTo([path[0], path[1]])
+    updateEssayTopic(topic.id)
   }, [])
-  const inputTopicId = (): void => {
-    // updateTopicIdForAddingAnEssay(topic.id) - more control but less convenient for the user?
-  }
   return (
     <Layout>
       <>{ path.map((el, i) => <span key={i}> {'>'} <Link href={el[1]}>{el[0]}</Link></span>) }</>
@@ -25,14 +47,15 @@ export default function Topic ({ topic, essays, path, updatePath, updateTopicIdF
         {
           essays.map((essay) =>
             <div key={essay.id}>
-            <li><Link href={'/categories/topics/essays/'.concat(essay.id)}>{essay.title}</Link></li>
-            <p>tag tag tag tag</p>
+            <li><Link href={`/categories/topics/essays/${essay.id}`}>{essay.title}</Link></li>
+            <p>tag tag tag tag</p> {/* TODO: make dynamic */}
             </div>
           )
         }
       </ol>
       {/* TODO ADD RESTRAINTS W DEV.DB */}
-      <Link href="/categories/topics/add-essay"><Button text="Add More (15)" onClick={inputTopicId}/></Link>
+      {/* TODO: input topic id through the url */}
+      <Link href="/categories/topics/add-essay"><Button text="Add More (15)" onClick={() => {}}/></Link>
     </Layout>
   )
 }
