@@ -11,7 +11,7 @@ import {
   RecedePathTo,
   UpdateEssayTopic,
   UpdateMetadataState
-} from '../types/state.interface'
+} from '../types/state'
 
 export default function App ({ Component, pageProps }: AppProps): ReactElement {
   const [openInput, setOpenInput] = useState(false)
