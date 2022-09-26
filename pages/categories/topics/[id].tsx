@@ -3,7 +3,7 @@ import Button from '../../../components/button'
 import Link from 'next/link'
 import { getEssaysByTopic, getTopicById, getTopics } from '../../../lib/db-script'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useEffect } from 'react'
+import { useEffect, ReactElement } from 'react'
 import {
   Path,
   AddToPath,
@@ -31,7 +31,7 @@ export default function Topic ({
   addToPath,
   updateEssayTopic,
   recedePathTo
-}: Props): React.ReactNode {
+}: Props): ReactElement {
   useEffect(() => {
     const text = `topics/${topic.shortTitle}`
     const link = `/categories/topics/${topic.id}`

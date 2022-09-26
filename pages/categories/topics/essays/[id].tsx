@@ -6,7 +6,7 @@ import { remark } from 'remark'
 import html from 'remark-html'
 import { getAllEssays, getEssayById } from '../../../../lib/db-script'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useEffect } from 'react'
+import { useEffect, ReactElement } from 'react'
 import {
   Path,
   MetadataState,
@@ -35,7 +35,7 @@ export default function Essay ({
   updateMetadataState,
   addToPath,
   recedePathTo
-}: Props): React.ReactNode {
+}: Props): ReactElement {
   useEffect(() => {
     const text = `essays/${essay.shortTitle}`
     const link = `/categories/topics/essays/${essay.id}`

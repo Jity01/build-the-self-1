@@ -4,6 +4,7 @@ import { AppProps } from 'next/app'
 import {
   RevealInput,
   HandleChange,
+  HandleTextArea,
   HandleSelect,
   HandleReset,
   AddToPath,
@@ -31,10 +32,8 @@ export default function App ({ Component, pageProps }: AppProps): ReactElement {
   const [metadataState, setMetadataState] = useState(0)
 
   const revealInput: RevealInput = () => setOpenInput(true)
-  const handleChange: HandleChange = (e) => {
-    const { id, value } = e.target
-    setInfo({ ...info, [id]: value })
-  }
+  const handleChange: HandleChange = (e) => setInfo({ ...info, [e.target.id]: e.target.value })
+  const handleTextArea: HandleTextArea = (e) => setInfo({ ...info, [e.target.id]: e.target.value })
   const handleSelect: HandleSelect = (e) => {
     const { id, options } = e.target
     const value = []
@@ -74,6 +73,7 @@ export default function App ({ Component, pageProps }: AppProps): ReactElement {
       revealInput={revealInput}
       updateMetadataState={updateMetadataState}
       handleChange={handleChange}
+      handleTextArea={handleTextArea}
       handleSelect={handleSelect}
       handleReset={handleReset}
       addToPath={addToPath}
