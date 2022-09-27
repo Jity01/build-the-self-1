@@ -1,8 +1,21 @@
 import { PrismaClient } from '@prisma/client'
+import {
+  CreateCategory,
+  CreateTopic,
+  CreateEssay,
+  GetCategories,
+  GetTopics,
+  GetAllEssays,
+  GetCategoryById,
+  GetTopicById,
+  GetEssayById,
+  GetEssaysByTopic,
+  GetTopicsByCategory
+} from '../types/script'
 
 const prisma = new PrismaClient()
 
-export const createCategory = async (title: string, shortTitle: string, quote: string, sourceOfQuote: string): Promise<any> => { // type return, see what prisma can provide u
+export const createCategory: CreateCategory = async (title, shortTitle, quote, sourceOfQuote) => {
   try {
     const category = await prisma.category.create({
       data: { title, shortTitle, quote, sourceOfQuote }
@@ -15,7 +28,7 @@ export const createCategory = async (title: string, shortTitle: string, quote: s
   }
 }
 
-export const createTopic = async (title: string, shortTitle: string, categoryId: number): Promise<any> => { 
+export const createTopic: CreateTopic = async (title, shortTitle, categoryId) => {
   try {
     const topic = await prisma.topic.create({
       data: {
@@ -28,11 +41,21 @@ export const createTopic = async (title: string, shortTitle: string, categoryId:
   } catch (e) {
     console.error(e)
     await prisma.$disconnect()
-    process.exit(1) // TODO: what even is this tho
+    process.exit(1)
   }
 }
 
-export const createEssay = async (title: string, shortTitle: string, content: string, date: string, age: string, source: string, extraSources: string, pastEssays: string, tags: string, topicId: number): Promise<any> => { // shorten args
+export const createEssay: CreateEssay = async (
+  title,
+  shortTitle,
+  content,
+  date,
+  age,
+  source,
+  extraSources,
+  pastEssays,
+  tags,
+  topicId) => {
   try {
     const essay = await prisma.essay.create({
       data: {
@@ -56,7 +79,7 @@ export const createEssay = async (title: string, shortTitle: string, content: st
   }
 }
 
-export const getCategories = async (): Promise<any> => {
+export const getCategories: GetCategories = async () => { // TODO: either pool prisma, or find another way to disconnect
   try {
     const categories = await prisma.category.findMany()
     return categories
@@ -67,7 +90,7 @@ export const getCategories = async (): Promise<any> => {
   }
 }
 
-export const getTopicsByCategory = async (categoryId: number): Promise<any> => {
+export const getTopicsByCategory: GetTopicsByCategory = async (categoryId) => {
   try {
     const topics = await prisma.topic.findMany({
       where: {
@@ -82,18 +105,18 @@ export const getTopicsByCategory = async (categoryId: number): Promise<any> => {
   }
 }
 
-export const getTopics = async (): Promise<any> => {
+export const getTopics: GetTopics = async () => {
   try {
     const topics = await prisma.topic.findMany()
     return topics
   } catch (e) {
     console.error(e)
-    await prisma.$disconnect() // TODO should it be explicit??
+    await prisma.$disconnect()
     process.exit(1)
   }
 }
 
-export const getCategoryById = async (categoryId: number): Promise<any> => {
+export const getCategoryById: GetCategoryById = async (categoryId) => {
   try {
     const category = await prisma.category.findUnique({
       where: {
@@ -108,7 +131,7 @@ export const getCategoryById = async (categoryId: number): Promise<any> => {
   }
 }
 
-export const getTopicById = async (topicId: number): Promise<any> => {
+export const getTopicById: GetTopicById = async (topicId) => {
   try {
     const topic = await prisma.topic.findUnique({
       where: {
@@ -119,11 +142,11 @@ export const getTopicById = async (topicId: number): Promise<any> => {
   } catch (e) {
     console.error(e)
     await prisma.$disconnect()
-    process.exit(1) // TODO make implicit?? for pooling ?
+    process.exit(1)
   }
 }
 
-export const getEssaysByTopic = async (topicId: number): Promise<any> => { // TODO is it used ?
+export const getEssaysByTopic: GetEssaysByTopic = async (topicId) => {
   try {
     const essays = await prisma.essay.findMany({
       where: { topicId }
@@ -132,11 +155,11 @@ export const getEssaysByTopic = async (topicId: number): Promise<any> => { // TO
   } catch (e) {
     console.error(e)
     await prisma.$disconnect()
-    process.exit(1) // TODO make implicit?? for pooling ?
+    process.exit(1)
   }
 }
 
-export const getAllEssays = async (): Promise<any> => {
+export const getAllEssays: GetAllEssays = async () => {
   try {
     const essays = await prisma.essay.findMany()
     return essays
@@ -147,7 +170,7 @@ export const getAllEssays = async (): Promise<any> => {
   }
 }
 
-export const getEssayById = async (essayId: number): Promise<any> => {
+export const getEssayById: GetEssayById = async (essayId) => {
   try {
     const essay = await prisma.essay.findUnique({
       where: {
