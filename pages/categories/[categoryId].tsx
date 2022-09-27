@@ -94,12 +94,12 @@ export default function Category ({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const categories = await getCategories()
-  const paths = categories.map(category => ({ params: { id: category.id.toString() } }))
+  const paths = categories.map(category => ({ params: { categoryId: category.id.toString() } }))
   return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => { // TODO: omg jesus y
-  const topics = await getTopicsByCategory(parseInt(params.id))
-  const category = await getCategoryById(parseInt(params.id))
+  const topics = await getTopicsByCategory(parseInt(params.categoryId))
+  const category = await getCategoryById(parseInt(params.categoryId))
   return { props: { topics, category } }
 }

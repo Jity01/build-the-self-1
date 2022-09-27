@@ -62,12 +62,12 @@ export default function Topic ({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const topics = await getTopics()
-  const paths = topics.map(topic => ({ params: { id: topic.id.toString() } }))
+  const paths = topics.map(topic => ({ params: { topicId: topic.id.toString() } }))
   return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const topic = await getTopicById(parseInt(params.id))
-  const essays = await getEssaysByTopic(parseInt(params.id))
+  const topic = await getTopicById(parseInt(params.topicId))
+  const essays = await getEssaysByTopic(parseInt(params.topicId))
   return { props: { topic, essays } }
 }
