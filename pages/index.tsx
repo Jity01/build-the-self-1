@@ -14,11 +14,11 @@ import {
   ResetPath
 } from '../types/state'
 import {
-  Category
+  CategoryTemplate
 } from '../types/db'
 
 interface Props {
-  categories: Category[]
+  categories: CategoryTemplate[]
   openInput: OpenInput
   info: Info
   revealInput: RevealInput
@@ -38,10 +38,10 @@ export default function Home ({
 }: Props): ReactElement { // TODO: generate lists
   const handleEnter = async (): Promise<void> => {
     const { title, shortTitle, quote, sourceOfQuote } = info // TODO handle error - make sure they're filled out
-    await fetch('api/create-category', { // TODO use react-query
+    await fetch('api/create-category', { // TODO use react-query - loading sign
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({'title': title, 'shortTitle': shortTitle, 'quote': quote, 'sourceOfQuote': sourceOfQuote})
+      body: JSON.stringify({ title, shortTitle, quote, sourceOfQuote })
     })
       .then(res => res.json())
       .then(res => categories.push(res)) // update categories
