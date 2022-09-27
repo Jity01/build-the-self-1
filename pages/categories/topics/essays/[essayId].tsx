@@ -65,15 +65,20 @@ export default function Essay ({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const essays = await getAllEssays()
-  const paths = essays.map(essay => ({ params: { essayId: essay.id.toString() } })) // TODO name the indexes differently? for readibility?
+  const paths = essays.map(essay => ({ params: { essayId: essay.id.toString() } }))
   return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const essay = await getEssayById(parseInt(params.essayId))
-  const processedEssayContent = await remark()
-    .use(html)
-    .process(essay.content)
-  const contentHtml = processedEssayContent.toString()
-  return { props: { essay, contentHtml } }
+  if (params !== undefined) {
+    const essay = await getEssayById(parseInt(params.essayId as string))
+    if (essay !== null) {
+      const processedEssayContent = await remark()
+        .use(html)
+        .process(essay.content)
+      const contentHtml = processedEssayContent.toString()
+      return { props: { essay, contentHtml } }
+    }
+  }
+  return { props: {} }
 }

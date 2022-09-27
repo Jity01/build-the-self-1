@@ -98,8 +98,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => { // TODO: omg jesus y
-  const topics = await getTopicsByCategory(parseInt(params.categoryId))
-  const category = await getCategoryById(parseInt(params.categoryId))
-  return { props: { topics, category } }
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (params !== undefined) { // TODO: TBC.. lol
+    const topics = await getTopicsByCategory(parseInt(params.categoryId as string))
+    const category = await getCategoryById(parseInt(params.categoryId as string))
+    return { props: { topics, category } }
+  }
+  return { props: {} }
 }

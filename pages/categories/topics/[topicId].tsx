@@ -66,8 +66,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const topic = await getTopicById(parseInt(params.topicId))
-  const essays = await getEssaysByTopic(parseInt(params.topicId))
-  return { props: { topic, essays } }
+export const getStaticProps: GetStaticProps = async ({ params }) => { // TODO: damn..
+  if (params !== undefined) {
+    const topic = await getTopicById(parseInt(params.topicId as string))
+    const essays = await getEssaysByTopic(parseInt(params.topicId as string))
+    return { props: { topic, essays } }
+  }
+  return { props: {} }
 }
