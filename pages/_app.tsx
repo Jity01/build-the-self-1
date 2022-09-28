@@ -14,7 +14,7 @@ import {
   UpdateMetadataState
 } from '../types/state'
 
-export default function App ({ Component, pageProps }: AppProps): ReactElement {
+export default function App ({ Component, pageProps }: AppProps): ReactElement { // TODO: maybe..prisma should be at the root
   const [openInput, setOpenInput] = useState(false)
   const [info, setInfo] = useState({
     title: '',
