@@ -3,35 +3,55 @@ import Button from '../../../components/button'
 import Link from 'next/link'
 import { getEssaysByTopic, getTopicById, getTopics } from '../../../lib/db-script'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useEffect, ReactElement } from 'react'
+import { useEffect, useState, ReactElement } from 'react'
 import {
   Path,
   AddToPath,
   RecedePathTo,
-  UpdateEssayTopic
+  UpdateEssayTopic,
+  Info,
+  HandleChange,
+  HandleSelect,
+  HandleTextArea,
+  HandleReset
 } from '../../../types/state'
 import {
   TopicTemplate,
   EssayTemplate
 } from '../../../types/db'
+import AddEssay from '../../../components/add-essay'
 
 interface Props {
+  info: Info
   topic: TopicTemplate
   essays: EssayTemplate[]
   path: Path
+  handleChange: HandleChange
+  handleSelect: HandleSelect
+  handleTextArea: HandleTextArea
+  handleReset: HandleReset
   addToPath: AddToPath
   recedePathTo: RecedePathTo
   updateEssayTopic: UpdateEssayTopic
 };
 
 export default function Topic ({
+  info,
   topic,
   essays,
   path,
+  handleChange,
+  handleTextArea,
+  handleSelect,
+  handleReset,
   addToPath,
   updateEssayTopic,
   recedePathTo
 }: Props): ReactElement {
+  const [openPrompt, setOpenPrompt] = useState(false)
+  const [closePrompt, setClosePrompt] = useState(false)
+  const revealPrompt = (): void => setOpenPrompt(true)
+  const removePrompt = (): void => setClosePrompt(true)
   useEffect(() => {
     const text = `topics/${topic.shortTitle}`
     const link = `/categories/topics/${topic.id}`
@@ -48,14 +68,23 @@ export default function Topic ({
           essays.map((essay) =>
             <div key={essay.id}>
             <li><Link href={`/categories/topics/essays/${essay.id}`}>{essay.title}</Link></li>
-            <p>tag tag tag tag</p> {/* TODO: make dynamic */}
             </div>
           )
         }
       </ol>
       {/* TODO ADD RESTRAINTS W DEV.DB */}
-      {/* TODO: input topic id through the url */}
-      <Link href="/categories/topics/add-essay"><Button text="Add More (15)" onClick={() => {}}/></Link>
+      <Button text="Add More (15)" onClick={revealPrompt} />
+      { openPrompt && !closePrompt &&
+        <>
+          <AddEssay
+            topicId={topic.id}
+            info={info}
+            handleChange={handleChange}
+            handleTextArea={handleTextArea}
+            handleSelect={handleSelect}
+            handleReset={handleReset} />
+          <Button text="close" onClick={removePrompt} />
+        </>}
     </Layout>
   )
 }
