@@ -44,8 +44,9 @@ export default function Category ({
   handleReset,
   addToPath,
   recedePathTo
-}: Props): ReactElement { // TODO type args
-  const handleEnter = async () => { // TODO react-query use
+}: Props): ReactElement {
+  const addTopicToDatabase = async (): Promise<void> => { // TODO: add validation.. im literally an idiot; i can put anything in here.
+    // TODO: fix promise typing..
     const { title, shortTitle } = info
     await fetch('/api/create-topic', {
       method: 'POST',
@@ -53,16 +54,22 @@ export default function Category ({
       body: JSON.stringify({ title, shortTitle, categoryId: category.id })
     })
       .then(async res => await res.json())
-      .then(res => topics.push(res)) // update mapped data
       .catch(e => console.log(e))
+  }
+  const handleEnter = async (): Promise<void> => {
+    await addTopicToDatabase()
     handleReset()
   }
+
   useEffect(() => {
     const text = `categories/${category.shortTitle}`
     const link = `/categories/${category.id}`
-    if (path.length === 0) { // set initial path
+    const isInitialPath = path.length === 0
+    const containsTopicPath = path.length > 1
+    console.log('here', path)
+    if (isInitialPath) { // set initial path
       addToPath(text, link)
-    } else if (path.length > 1) { // reset to inital path
+    } else if (containsTopicPath) { // reset to inital path
       recedePathTo([path[0]])
     }
   }, [])
@@ -98,7 +105,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths, fallback: false }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => { // TODO: useQuery HERE
   if (params !== undefined) { // TODO: TBC.. lol
     const topics = await getTopicsByCategory(parseInt(params.categoryId as string))
     const category = await getCategoryById(parseInt(params.categoryId as string))
