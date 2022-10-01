@@ -20,6 +20,7 @@ export const createCategory: CreateCategory = async (title, shortTitle, quote, s
     const category = await prisma.category.create({
       data: { title, shortTitle, quote, sourceOfQuote }
     })
+    await prisma.$disconnect()
     return category
   } catch (e) {
     console.error(e)
@@ -37,6 +38,7 @@ export const createTopic: CreateTopic = async (title, shortTitle, categoryId) =>
         categoryId
       }
     })
+    await prisma.$disconnect()
     return topic
   } catch (e) {
     console.error(e)
@@ -71,6 +73,7 @@ export const createEssay: CreateEssay = async (
         topicId
       }
     })
+    await prisma.$disconnect()
     return essay
   } catch (e) {
     console.error(e)
@@ -82,6 +85,7 @@ export const createEssay: CreateEssay = async (
 export const getCategories: GetCategories = async () => { // TODO: either pool prisma, or find another way to disconnect
   try {
     const categories = await prisma.category.findMany()
+    await prisma.$disconnect()
     return categories
   } catch (e) {
     console.error(e)
@@ -97,9 +101,10 @@ export const getTopicsByCategory: GetTopicsByCategory = async (categoryId) => {
         categoryId
       }
     })
+    await prisma.$disconnect()
     return topics
   } catch (e) {
-    console.error(e)
+    console.error(e) // TODO: throw this error instead
     await prisma.$disconnect()
     process.exit(1)
   }
@@ -108,7 +113,24 @@ export const getTopicsByCategory: GetTopicsByCategory = async (categoryId) => {
 export const getTopics: GetTopics = async () => {
   try {
     const topics = await prisma.topic.findMany()
+    await prisma.$disconnect()
     return topics
+  } catch (e) {
+    console.error(e)
+    await prisma.$disconnect()
+    process.exit(1)
+  }
+}
+
+export const getTopicIdByTitle = async (title: string): Promise<any> => {
+  try {
+    const topic = await prisma.topic.findFirstOrThrow({
+      where: {
+        title
+      }
+    })
+    await prisma.$disconnect()
+    return topic.id
   } catch (e) {
     console.error(e)
     await prisma.$disconnect()
@@ -123,6 +145,7 @@ export const getCategoryById: GetCategoryById = async (categoryId) => {
         id: categoryId
       }
     })
+    await prisma.$disconnect()
     return category
   } catch (e) {
     console.error(e)
@@ -138,6 +161,7 @@ export const getTopicById: GetTopicById = async (topicId) => {
         id: topicId
       }
     })
+    await prisma.$disconnect()
     return topic
   } catch (e) {
     console.error(e)
@@ -151,6 +175,7 @@ export const getEssaysByTopic: GetEssaysByTopic = async (topicId) => {
     const essays = await prisma.essay.findMany({
       where: { topicId }
     })
+    await prisma.$disconnect()
     return essays
   } catch (e) {
     console.error(e)
@@ -162,6 +187,7 @@ export const getEssaysByTopic: GetEssaysByTopic = async (topicId) => {
 export const getAllEssays: GetAllEssays = async () => {
   try {
     const essays = await prisma.essay.findMany()
+    await prisma.$disconnect()
     return essays
   } catch (e) {
     console.error(e)
@@ -177,6 +203,7 @@ export const getEssayById: GetEssayById = async (essayId) => {
         id: essayId
       }
     })
+    await prisma.$disconnect()
     return essay
   } catch (e) {
     console.error(e)
