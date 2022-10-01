@@ -40,11 +40,9 @@ export default function Home ({
     const { title, shortTitle, quote, sourceOfQuote } = info // TODO handle error - make sure they're filled out
     await fetch('api/create-category', { // TODO use react-query - loading sign
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({ title, shortTitle, quote, sourceOfQuote })
     })
-      .then(res => res.json())
-      .then(res => categories.push(res)) // update categories
       .catch(e => console.log(e))
     handleReset()
   }
