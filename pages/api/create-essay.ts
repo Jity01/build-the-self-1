@@ -14,8 +14,6 @@ const calculateAge = (): string => {
   }
   const age = `${yearDiff} yrs, ${monthDiff} mth`
   return age
-  // TODO make prettier pls, and make sure this actually works
-  // formatted age - 17 yrs, 4 mth
 }
 
 const formatedDate = (): string => {
@@ -25,10 +23,10 @@ const formatedDate = (): string => {
   return `${currentMonth}, ${date.getFullYear()}`
 }
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
-    const { title, shortTitle, content, source, extraSources, pastEssays, stringifiedTags, topicIdForAddingAnEssay } = req.body // TODO change name here too
-    const essay = await createEssay(title, shortTitle, content, formatedDate(), calculateAge(), source, extraSources, pastEssays, stringifiedTags, topicIdForAddingAnEssay)
+    const { title, shortTitle, content, source, extraSources, pastEssays, stringifiedTags, topicId } = req.body // TODO change name here too
+    const essay = await createEssay(title, shortTitle, content, formatedDate(), calculateAge(), source, extraSources, pastEssays, stringifiedTags, topicId)
     console.log(essay)
     res.status(200).json(essay)
   } catch (e) {
