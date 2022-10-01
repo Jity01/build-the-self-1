@@ -5,5 +5,5 @@ prisma/dev.db-journal
 next-env.d.ts
 .next/
 # Keep environment variables out of version control
-.env
-.env.local
+# .env
+# .env.local
